@@ -19,6 +19,7 @@ while (true) {
     echo "Turning On\n";
     foreach ($devices as $device) {
         `adb -s $device shell input keyevent 82`;
+        `adb shell input touchscreen swipe 1200 2200 1200 1200 100`;
     }
     if ($keycode > 0) {
         `adb shell input text $keycode && adb shell input keyevent 66`;
