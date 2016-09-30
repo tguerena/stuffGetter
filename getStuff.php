@@ -19,7 +19,6 @@ while (true) {
     echo "Turning On\n";
     foreach ($devices as $device) {
         `adb -s $device shell input keyevent 82`;
-        `adb shell input touchscreen swipe 1200 2200 1200 1200 100`;
     }
     if ($keycode > 0) {
         `adb shell input text $keycode && adb shell input keyevent 66`;
@@ -32,33 +31,55 @@ while (true) {
             `adb -s $device shell monkey -p com.nianticlabs.pokemongo  -c android.intent.category.LAUNCHER 1`;
         }
         sleep(20);
+        echo "Accept Agreement\n";
         foreach ($devices as $device) {
-            `adb -s $device shell input tap 843 1443`;
+            $checkForTopApp = `adb -s $device shell dumpsys activity | grep top-activity`;
+            echo $checkForTopApp;
+            if (strpos($checkForTopApp,"pokemon") !== false) {
+                `adb -s $device shell input tap 843 1443`;
+            }
         }
     }
-    $topApp = `adb shell dumpsys activity | grep top-activity`;
-    echo "$topApp\n";
-    echo "adb shell input touchscreen tap 1245 1145;\n";
-    sleep(10);
-    foreach ($devices as $device) {
-        `adb -s $device shell "input touchscreen tap 1245 1345 && input touchscreen tap 1145 1345 && input touchscreen tap 1045 1345 && input touchscreen tap 945 1345 && input touchscreen tap 845 1345 && input touchscreen tap 745 1345 && input touchscreen tap 645 1345 && input touchscreen tap 545 1345"`;
-    }
-    echo "Sleeping for $sleep\n";
-    sleep($sleep);
-    echo "adb shell input touchscreen swipe $startx $starty $endx $endy $duration;\n";
+//    $topApp = `adb shell dumpsys activity | grep top-activity`;
+//    echo "$topApp\n";
+    echo "Sleeping for 10\n";
+    sleep(12);
+    echo "Touching all over to find the spot... er... stop\n";
 
     foreach ($devices as $device) {
-        `adb -s $device shell input touchscreen swipe $startx $starty $endx $endy $duration;`;
+        $checkForTopApp = `adb -s $device shell dumpsys activity | grep top-activity`;
+        if (strpos($checkForTopApp,"pokemon") !== false) {
+            `adb -s $device shell "input touchscreen tap 1245 1345 && input touchscreen tap 1145 1345 && input touchscreen tap 1045 1345 && input touchscreen tap 945 1345 && input touchscreen tap 845 1345 && input touchscreen tap 745 1345 && input touchscreen tap 645 1345 && input touchscreen tap 545 1345"`;
+        }
     }
-    echo "adb shell input keyevent KEYCODE_BACK\n";
+    echo "Sleeping for $sleep\n";
+
+    sleep($sleep);
+
+    echo "Swiping the PokeStop\n";
+
     foreach ($devices as $device) {
-        `adb -s $device shell input keyevent KEYCODE_BACK`;
+        $checkForTopApp = `adb -s $device shell dumpsys activity | grep top-activity`;
+        if (strpos($checkForTopApp,"pokemon") !== false) {
+            `adb -s $device shell input touchscreen swipe $startx $starty $endx $endy $duration;`;
+        }
+    }
+    echo "Tap Back\n";
+    foreach ($devices as $device) {
+        $checkForTopApp = `adb -s $device shell dumpsys activity | grep top-activity`;
+        if (strpos($checkForTopApp,"pokemon") !== false) {
+            `adb -s $device shell input keyevent KEYCODE_BACK`;
+        }
     }
     echo "Sleeping for 3\n";
     sleep(3);
     foreach ($devices as $device) {
-        `adb -s $device shell input keyevent KEYCODE_POWER`;
+        $checkForTopApp = `adb -s $device shell dumpsys activity | grep top-activity`;
+        if (strpos($checkForTopApp,"pokemon") !== false) {
+            `adb -s $device shell input keyevent KEYCODE_POWER`;
+        }
     }
+
     foreach ($devices as $device) {
         $command = `adb -s $device shell dumpsys battery | grep level`;
         echo "\e[36mBattery$command\e[0m";
@@ -67,7 +88,10 @@ while (true) {
     echo "------------------------------------------------------------------------\n";
     sleep($sleep2);
     foreach ($devices as $device) {
-        `adb -s $device shell input tap 843 1443`;
+        $checkForTopApp = `adb -s $device shell dumpsys activity | grep top-activity`;
+        if (strpos($checkForTopApp,"pokemon") !== false) {
+            `adb -s $device shell input tap 843 1443`;
+        }
     }
     $count++;
 }
