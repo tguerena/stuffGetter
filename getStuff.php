@@ -19,6 +19,8 @@ while (true) {
     echo "Turning On\n";
     foreach ($devices as $device) {
         `adb -s $device shell input keyevent 82`;
+        sleep(1);
+        `adb -s $device shell input keyevent 82`;
     }
     if ($keycode > 0) {
         `adb shell input text $keycode && adb shell input keyevent 66`;
@@ -36,7 +38,7 @@ while (true) {
             $checkForTopApp = `adb -s $device shell dumpsys activity | grep top-activity`;
             echo $checkForTopApp;
             if (strpos($checkForTopApp,"pokemon") !== false) {
-                `adb -s $device shell input tap 843 1443`;
+                `adb -s $device shell input tap 730 1300`;
             }
         }
     }
