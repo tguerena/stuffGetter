@@ -18,9 +18,16 @@ while (true) {
     $sleep2 = mt_rand(279,290);
     echo "Turning On\n";
     foreach ($devices as $device) {
-        `adb -s $device shell input keyevent 82`;
         sleep(1);
-        `adb -s $device shell input keyevent 82`;
+        if (strpos($device,"LG") !== false){
+            `adb -s $device shell input keyevent 26`;
+            sleep(1);
+            `adb -s $device shell input keyevent 62`;
+        } else {
+            `adb -s $device shell input keyevent 82`;
+            sleep(1);
+            `adb -s $device shell input keyevent 82`;
+        }
     }
     if ($keycode > 0) {
         `adb shell input text $keycode && adb shell input keyevent 66`;
